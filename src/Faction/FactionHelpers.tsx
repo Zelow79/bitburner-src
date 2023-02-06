@@ -3,7 +3,6 @@ import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-
 import { Faction } from "./Faction";
 import { Factions } from "./Factions";
 import { Player } from "@player";
@@ -157,7 +156,10 @@ export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
         return true;
       }
 
-      return rng() >= 1 - BitNodeMultipliers.GangUniqueAugs;
+      const isHackingGang = faction.name === FactionNames.NiteSec || faction.name === FactionNames.TheBlackHand;
+      const mod = BitNodeMultipliers.GangUniqueAugs;
+      const hackBuff = 1.5; // Give hacking gangs a 50% boost when factoring available faction-unique augs
+      return isHackingGang ? rng() >= 1 - (mod * hackBuff > 1 ? 1 : mod * hackBuff) : rng() >= 1 - mod;
     };
     augs = augs.filter(uniqueFilter);
 
