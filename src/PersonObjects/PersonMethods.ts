@@ -110,7 +110,7 @@ export function gainIntelligenceExp(this: Person, exp: number): void {
   }
   if (Player.sourceFileLvl(5) > 0 || this.skills.intelligence > 0 || Player.bitNodeN === 5) {
     this.exp.intelligence += exp;
-    this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));
+    this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, this.mults.intelligence));
   }
 }
 export function gainStats(this: Person, retValue: WorkStats): void {
@@ -192,7 +192,13 @@ export function updateSkillLevels(this: Person): void {
       this.calculateSkill(this.exp.charisma, this.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier),
     ),
   );
-
+  this.skills.intelligence = Math.max(
+    1,
+    Math.floor(
+      this.calculateSkill(this.exp.intelligence, this.mults.intelligence),
+    ),
+  );
+  
   const ratio: number = Math.min(this.hp.current / this.hp.max, 1);
   this.hp.max = Math.floor(10 + this.skills.defense / 10);
   this.hp.current = Math.round(this.hp.max * ratio);

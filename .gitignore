@@ -28,6 +28,6 @@ dist/*.worker.*
 .vscode
 
 .idea/
-*.bundle.*
-index.html
+#*.bundle.*
+#index.html
 tsdoc-metadata.json
